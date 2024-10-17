@@ -1,6 +1,13 @@
 package utils
 
-type Page struct {
+type GenericPage struct {
 	Titles []string
+	Paragraphs []string
+}
+
+type WikiPage struct {
+	Title string
+	Headings []string
+	Subtitles []string
 	Paragraphs []string
 }
