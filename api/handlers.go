@@ -6,6 +6,6 @@ import (
 )
 
 func Scrape(w http.ResponseWriter, r *http.Request) {
-	url := r.URL.Path[len("/scrape/"):]
+	url := r.URL.Path[len("/"):]
 	fmt.Fprintf(w, "Scraping %s", url)
 }
