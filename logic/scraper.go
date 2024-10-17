@@ -1,4 +1,4 @@
-package scraper
+package logic
 
 import (
 	"fmt"

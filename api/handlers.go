@@ -2,8 +2,9 @@ package api
 
 import (
 	"net/http"
+	"os"
 
-	"github.com/alexleyoung/summarizer/scraper"
+	"github.com/alexleyoung/summarizer/logic"
 )
 
 func Scrape(w http.ResponseWriter, r *http.Request) {
@@ -11,9 +12,13 @@ func Scrape(w http.ResponseWriter, r *http.Request) {
 	if url[:len("https:/")] == "https:/" {
 		url = "https://" + url[len("https:/"):]
 	}
-	page := scraper.ScrapeURL(url)
-	w.Write([]byte(page.Titles[0]))
-	for _, p := range page.Paragraphs {
-		w.Write([]byte(p))
+	
+	page := logic.ScrapeURL(url)
+	content := page.Titles[0] + "\n\n"
+	for _, paragraph := range page.Paragraphs {
+		content += paragraph + "\n\n"
 	}
+
+	respone := logic.Chat(os.Getenv("OPENAI_API_KEY"), content)
+	w.Write([]byte(respone))
 }
