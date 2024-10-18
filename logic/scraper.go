@@ -20,9 +20,11 @@ func ScrapeGeneric(url string) utils.GenericPage {
 	})
 	c.OnHTML("h1", func(e *colly.HTMLElement) {
 		page.Titles = append(page.Titles, e.Text)
+		page.Content = e.Text + "\n\n"
 	})
 	c.OnHTML("p", func(e *colly.HTMLElement) {
 		page.Paragraphs = append(page.Paragraphs, e.Text)
+		page.Content += e.Text + "\n"
 	})
 
 	c.Visit(url)
@@ -42,15 +44,19 @@ func ScrapeWiki(url string) utils.WikiPage {
 	})
 	c.OnHTML("span.mw-page-title-main", func(e *colly.HTMLElement) {
 		page.Title = e.Text
+		page.Content = e.Text + "\n\n"
 	})
 	c.OnHTML("h2", func(e *colly.HTMLElement) {
 		page.Headings = append(page.Headings, e.Text)
+		page.Content += e.Text + "\n\n"
 	})
 	c.OnHTML("h3", func(e *colly.HTMLElement) {
 		page.Subtitles = append(page.Subtitles, e.Text)
+		page.Content += e.Text + "\n\n"
 	})
 	c.OnHTML("p", func(e *colly.HTMLElement) {
 		page.Paragraphs = append(page.Paragraphs, e.Text)
+		page.Content += e.Text + "\n"
 	})
 
 	c.Visit(url)

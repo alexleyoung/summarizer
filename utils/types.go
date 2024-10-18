@@ -3,6 +3,7 @@ package utils
 type GenericPage struct {
 	Titles []string
 	Paragraphs []string
+	Content string
 }
 
 type WikiPage struct {
@@ -10,4 +11,5 @@ type WikiPage struct {
 	Headings []string
 	Subtitles []string
 	Paragraphs []string
+	Content string
 }
