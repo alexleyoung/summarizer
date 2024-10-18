@@ -3,12 +3,13 @@ package logic
 import (
 	"context"
 	"fmt"
+	"os"
 
 	"github.com/sashabaranov/go-openai"
 )
 
-func ChatStream(key string, input string) (*openai.ChatCompletionStream, error) {
-	c := openai.NewClient(key)
+func GetSummaryStream(input string) (*openai.ChatCompletionStream, error) {
+	c := openai.NewClient(os.Getenv("OPENAI_API_KEY"))
 	ctx := context.Background()
 	req := openai.ChatCompletionRequest{
 		Model:     openai.GPT4oMini,

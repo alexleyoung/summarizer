@@ -5,13 +5,12 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"os"
 
 	"github.com/alexleyoung/summarizer/logic"
 	"github.com/alexleyoung/summarizer/utils"
 )
 
-func Scrape(w http.ResponseWriter, r *http.Request) {
+func summarize(w http.ResponseWriter, r *http.Request) {
 	url := utils.ParseURL(r.URL.Path[len("/"):])
 
 	content := ""
@@ -27,7 +26,7 @@ func Scrape(w http.ResponseWriter, r *http.Request) {
 }
 
 func streamOutput(w http.ResponseWriter, content string) {
-	stream, err := logic.ChatStream(os.Getenv("OPENAI_API_KEY"), content); if err != nil {
+	stream, err := logic.GetSummaryStream(content); if err != nil {
 		w.Write([]byte(err.Error()))
 		return
 	}
@@ -53,7 +52,7 @@ func streamOutput(w http.ResponseWriter, content string) {
 }
 
 func returnStream(w http.ResponseWriter, content string) {
-	stream, err := logic.ChatStream(os.Getenv("OPENAI_API_KEY"), content); if err != nil {
+	stream, err := logic.GetSummaryStream(content); if err != nil {
 		w.Write([]byte(err.Error()))
 		return
 	}
