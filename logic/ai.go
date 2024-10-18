@@ -7,29 +7,28 @@ import (
 	"github.com/sashabaranov/go-openai"
 )
 
-func Chat(key string, input string) string {
-	client := openai.NewClient(key)
-	resp, err := client.CreateChatCompletion(
-		context.Background(),
-		openai.ChatCompletionRequest{
-			Model: openai.GPT4oMini,
-			Messages: []openai.ChatCompletionMessage{
-				{
-					Role: openai.ChatMessageRoleSystem,
-					Content: "You are an expert at summarizing documents. You will be given a title and paragraphs from the document. Your task is to summarize the document into a concise, logically coherent summary. You should use headers to organize the summary.",
-				},
-				{
-					Role:    openai.ChatMessageRoleUser,
-					Content: input,
-				},
+func ChatStream(key string, input string) (*openai.ChatCompletionStream, error) {
+	c := openai.NewClient(key)
+	ctx := context.Background()
+	req := openai.ChatCompletionRequest{
+		Model:     openai.GPT4oMini,
+		Messages: []openai.ChatCompletionMessage{
+			{
+				Role:    openai.ChatMessageRoleSystem,
+				Content: "You are an expert at summarizing documents. You will be given a title and paragraphs from the document. Your task is to summarize the document into a concise, logically coherent summary. You should use headers to organize the summary.",
+			},
+			{
+				Role:    openai.ChatMessageRoleUser,
+				Content: input,
 			},
 		},
-	)
-
-	if err != nil {
-		fmt.Printf("ChatCompletion error: %v\n", err)
-		return ""
+		Stream: true,
 	}
-
-	return resp.Choices[0].Message.Content
+	stream, err := c.CreateChatCompletionStream(ctx, req)
+	if err != nil {
+		fmt.Printf("ChatCompletionStream error: %v\n", err)
+		return nil, err
+	}
+	return stream, nil
+	
 }
